@@ -5,6 +5,8 @@ import 'package:sizer/sizer.dart';
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
+  DatabaseReference ref = FirebaseDatabase.instance.ref("/Is_allowed");
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -12,19 +14,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    FirebaseDatabase database = FirebaseDatabase.instance;
-    DatabaseReference ref = database.ref("/Is_allowed");
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Badge AI'),
       ),
       body: Center(
-        child: Container(
-          color: Colors.brown,
-          width: 55.w,
-          height: 25.h,
-        ),
+        child: ElevatedButton(
+            onPressed: () {
+              print("pressed!");
+            },
+            child: Text("press to change data")),
       ),
     );
   }
