@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    ref = FirebaseDatabase.instance.reference();
+   ref = FirebaseDatabase.instance.ref("/allowed");
   }
 
   @override
@@ -35,6 +35,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   _createDB() {
-    ref.set("amit profile");
+    ref.set(false);
   }
 }
