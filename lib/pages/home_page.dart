@@ -5,13 +5,19 @@ import 'package:sizer/sizer.dart';
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
-  DatabaseReference ref = FirebaseDatabase.instance.ref("/Is_allowed");
-
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  late DatabaseReference ref;
+
+  @override
+  void initState() {
+    super.initState();
+    ref = FirebaseDatabase.instance.reference();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +27,14 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: ElevatedButton(
             onPressed: () {
-              print("pressed!");
+              _createDB();
             },
             child: Text("press to change data")),
       ),
     );
+  }
+
+  _createDB() {
+    ref.set("amit profile");
   }
 }
