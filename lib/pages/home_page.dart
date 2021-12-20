@@ -4,37 +4,34 @@ import 'package:sizer/sizer.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
+  final DatabaseReference ref = FirebaseDatabase.instance.ref();
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  late DatabaseReference ref;
-
-  @override
-  void initState() {
-    super.initState();
-   ref = FirebaseDatabase.instance.ref("/allowed");
-  }
-
+  DatabaseEvent? event;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Badge AI'),
       ),
-      body: Center(
-        child: ElevatedButton(
-            onPressed: () {
-              _createDB();
-            },
-            child: Text("press to change data")),
+      body: Column(
+        children: [
+          ElevatedButton(
+              onPressed: () async {
+                event = await widget.ref.once();
+                setState(() {});
+                print('${(event)!.snapshot.value}');
+              },
+              child: Text("press to read data")),
+          event == null
+              ? Text('Nothing\'s read yet')
+              : Text('the value read is: ${(event)!.snapshot.value}'),
+        ],
       ),
     );
-  }
-
-  _createDB() {
-    ref.set(false);
   }
 }
