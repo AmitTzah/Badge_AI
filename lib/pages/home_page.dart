@@ -36,23 +36,33 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Badge AI'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                  onPressed: () async {
-                    await widget.ref.child("/allowed").set(true);
-                  },
-                  child: Text("Set allowed to true: $allowed")),
+                onPressed: () async {
+                  await widget.ref.child("/allowed").set(true);
+                },
+                child: Text("Allowed: $allowed",
+                    style: TextStyle(fontSize: 20.sp)),
+              ),
             ],
           ),
+          SizedBox(
+            height: 5.h,
+          ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                  onPressed: () async {
-                    await widget.ref.child("/denied").set(true);
-                  },
-                  child: Text("Set allowed to true: $denied")),
+                onPressed: () async {
+                  await widget.ref.child("/denied").set(true);
+                },
+                child: Text("Denied: $denied",
+                    style: TextStyle(fontSize: 20.sp)),
+              ),
             ],
           )
         ],
