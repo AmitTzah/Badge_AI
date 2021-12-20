@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -50,5 +47,16 @@ class DefaultFirebaseOptions {
     projectId: 'a-simple-flutter-arduino-test',
     databaseURL: 'https://a-simple-flutter-arduino-test-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'a-simple-flutter-arduino-test.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyBPbblBkneAnPCLOyaCda_KQ4sLqkR5yo8',
+    appId: '1:645996289423:ios:0e286bcc18ffc3f18dbffa',
+    messagingSenderId: '645996289423',
+    projectId: 'a-simple-flutter-arduino-test',
+    databaseURL: 'https://a-simple-flutter-arduino-test-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'a-simple-flutter-arduino-test.appspot.com',
+    iosClientId: '645996289423-qrtseebn147h1r1dt7ftoh5f2jdbfgnl.apps.googleusercontent.com',
+    iosBundleId: 'com.example.app',
   );
 }
