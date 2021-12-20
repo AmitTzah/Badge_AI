@@ -11,7 +11,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  DatabaseEvent? event;
+  dynamic allowed = '';
+  dynamic denied = '';
+  @override
+  void initState() {
+    super.initState();
+    widget.ref.child("/allowed").onValue.listen((event) {
+      setState(() {
+        allowed = event.snapshot.value;
+      });
+    });
+
+    widget.ref.child("/denied").onValue.listen((event) {
+      setState(() {
+        denied = event.snapshot.value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,16 +37,24 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          ElevatedButton(
-              onPressed: () async {
-                event = await widget.ref.once();
-                setState(() {});
-                print('${(event)!.snapshot.value}');
-              },
-              child: Text("press to read data")),
-          event == null
-              ? Text('Nothing\'s read yet')
-              : Text('the value read is: ${(event)!.snapshot.value}'),
+          Row(
+            children: [
+              ElevatedButton(
+                  onPressed: () async {
+                    await widget.ref.child("/allowed").set(true);
+                  },
+                  child: Text("Set allowed to true: $allowed")),
+            ],
+          ),
+          Row(
+            children: [
+              ElevatedButton(
+                  onPressed: () async {
+                    await widget.ref.child("/denied").set(true);
+                  },
+                  child: Text("Set allowed to true: $denied")),
+            ],
+          )
         ],
       ),
     );
