@@ -16,13 +16,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    widget.ref.child("/allowed").onValue.listen((event) {
+    widget.ref.child("/Building1/Door1/Open").onValue.listen((event) {
       setState(() {
         allowed = event.snapshot.value;
       });
     });
 
-    widget.ref.child("/denied").onValue.listen((event) {
+    widget.ref.child("/Building1/Door1/Locked").onValue.listen((event) {
       setState(() {
         denied = event.snapshot.value;
       });
@@ -43,9 +43,9 @@ class _HomePageState extends State<HomePage> {
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  await widget.ref.child("/allowed").set(true);
+                  await widget.ref.child("/Building1/Door1/Open").set(1);
                 },
-                child: Text("Allowed: $allowed",
+                child: Text("Open: $allowed",
                     style: TextStyle(fontSize: 20.sp)),
               ),
             ],
@@ -58,9 +58,13 @@ class _HomePageState extends State<HomePage> {
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  await widget.ref.child("/denied").set(true);
+                  if(denied==0){
+                    await widget.ref.child("/Building1/Door1/Locked").set(1);
+                  }else{
+                    await widget.ref.child("/Building1/Door1/Locked").set(0);
+                  }
                 },
-                child: Text("Denied: $denied",
+                child: Text("Locked: $denied",
                     style: TextStyle(fontSize: 20.sp)),
               ),
             ],
