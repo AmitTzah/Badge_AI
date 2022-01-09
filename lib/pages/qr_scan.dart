@@ -82,11 +82,11 @@ class _QRScanState extends State<QRScan> {
                       children: <Widget>[
                         ElevatedButton(
                             onPressed: () => scanQR(),
-                            child: Text('Start QR scan')),
+                            child: const Text('Start QR scan')),
                         Text('Scan result : $_scanBarcode\n',
-                            style: TextStyle(fontSize: 20)),
+                            style: const TextStyle(fontSize: 20)),
                         ElevatedButton(
-                          child: Text('Open Door'),
+                          child: const Text('Open Door'),
                             onPressed: () {
                               Navigator.push(
                               context,

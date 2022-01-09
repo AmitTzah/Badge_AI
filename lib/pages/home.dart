@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -20,14 +22,14 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('You have logged in Successfuly'),
-            SizedBox(height: 50),
-            Container(
+            const Text('You have logged in Successfuly'),
+            const SizedBox(height: 50),
+            SizedBox(
               height: 60,
               width: 150,
               child: ElevatedButton(
                   clipBehavior: Clip.hardEdge,
-                  child: Center(
+                  child: const Center(
                     child: Text('Scan QR'),
                   ),
                   onPressed: () async {
@@ -40,13 +42,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                   }),
             ),
-              SizedBox(height: 50),
-              Container(
+              const SizedBox(height: 50),
+              SizedBox(
               height: 60,
               width: 150,
               child: ElevatedButton(
                   clipBehavior: Clip.hardEdge,
-                  child: Center(
+                  child: const Center(
                     child: Text('Log out'),
                   ),
                   onPressed: () async {
@@ -54,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (_firebaseAuth.currentUser == null) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
                       );
                     }
                   }),

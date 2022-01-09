@@ -5,7 +5,10 @@ import 'button.dart';
 import 'constants.dart';
 import 'home.dart';
 import 'register.dart';
+
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -19,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isloading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Form(
@@ -34,18 +37,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Colors.grey[200],
                       child: SingleChildScrollView(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 25, vertical: 120),
+                            const EdgeInsets.symmetric(horizontal: 25, vertical: 120),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               "Sign In",
                               style: TextStyle(
                                   fontSize: 50,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(height: 30),
+                            const SizedBox(height: 30),
                             TextFormField(
                               keyboardType: TextInputType.emailAddress,
                               onChanged: (value) {
@@ -59,13 +62,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               textAlign: TextAlign.center,
                               decoration: kTextFieldDecoration.copyWith(
                                 hintText: 'Email',
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.email,
                                   color: Colors.black,
                                 ),
                               ),
                             ),
-                            SizedBox(height: 30),
+                            const SizedBox(height: 30),
                             TextFormField(
                               obscureText: true,
                               validator: (value) {
@@ -79,12 +82,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               textAlign: TextAlign.center,
                               decoration: kTextFieldDecoration.copyWith(
                                   hintText: 'Password',
-                                  prefixIcon: Icon(
+                                  prefixIcon: const Icon(
                                     Icons.lock,
                                     color: Colors.black,
                                   )),
                             ),
-                            SizedBox(height: 80),
+                            const SizedBox(height: 80),
                             LoginSignupButton(
                               title: 'Login',
                               ontapp: () async {
@@ -97,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         email: email, password: password);
                                     await Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (contex) => HomeScreen(),
+                                        builder: (contex) => const HomeScreen(),
                                       ),
                                     );
                                     setState(() {
@@ -107,18 +110,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                     showDialog(
                                       context: context,
                                       builder: (ctx) => AlertDialog(
-                                        title: Text("Ops! Login Failed"),
+                                        title: const Text("Ops! Login Failed"),
                                         content: Text('${e.message}'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
                                               Navigator.of(ctx).pop();
                                             },
-                                            child: Text('Okay'),
+                                            child: const Text('Okay'),
                                           )
                                         ],
                                       ),
                                     );
+                                    // ignore: avoid_print
                                     print(e);
                                   }
                                   setState(() {
@@ -127,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                               },
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(
@@ -137,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
                               },
                               child: Row(
-                                children: [
+                                children: const [
                                   Text(
                                     "Don't have an Account ?",
                                     style: TextStyle(
