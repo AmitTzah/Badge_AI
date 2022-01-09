@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:badge_ai/pages/home.dart';
+import 'package:badge_ai/pages/login.dart';
 
 //firebase:
 
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blueGrey,
           ),
-          home: QRScan(),
+          home: LoginScreen(),
         );
       },
     );
