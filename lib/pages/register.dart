@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -102,8 +103,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                     isloading = true;
                                   });
                                   try {
-                                    await _auth.createUserWithEmailAndPassword(
+                                    final UserCredential user= await _auth.createUserWithEmailAndPassword(
                                         email: email, password: password);
+                                    setUser(user);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         backgroundColor: Colors.blueGrey,
@@ -153,4 +155,14 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
     );
   }
+}
+
+Future<void> setUser(UserCredential user)async {
+  FirebaseFirestore.instance.collection('users')
+  .doc(user.user!.uid) // <-- Document ID
+  .set({'uid':user.user!.uid
+  ,'email':user.user!.email
+  ,'/Building1/Door1':0
+  ,'/Building1/Door2':0
+  ,'/Building2/Door1':0}); // <-- Your data
 }
