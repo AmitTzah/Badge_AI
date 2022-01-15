@@ -87,13 +87,16 @@ class _QRScanState extends State<QRScan> {
                             style: const TextStyle(fontSize: 20)),
                         ElevatedButton(
                           child: const Text('Open Door'),
-                            onPressed: () {
-                              Navigator.push(
+                          onPressed: () {
+                            Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => HomePage(door: _scanBarcode)),
-                              );
-                            },
-              )]));
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      HomePage(door: _scanBarcode)),
+                            );
+                          },
+                        )
+                      ]));
             })));
   }
 }

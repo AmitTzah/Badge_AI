@@ -1,5 +1,6 @@
 import 'package:badge_ai/pages/home_page.dart';
 import 'package:badge_ai/pages/qr_scan.dart';
+import 'package:badge_ai/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,7 +37,8 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blueGrey,
           ),
-          home: LoginScreen(),
+         initialRoute: RouteManager.login,
+         onGenerateRoute:RouteManager.generateRoute ,
         );
       },
     );

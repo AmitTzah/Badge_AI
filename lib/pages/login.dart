@@ -1,3 +1,4 @@
+import 'package:badge_ai/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +13,7 @@ class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
+
 class _LoginScreenState extends State<LoginScreen> {
   final formkey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
@@ -36,8 +38,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: double.infinity,
                       color: Colors.grey[200],
                       child: SingleChildScrollView(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 25, vertical: 120),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25, vertical: 120),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -98,11 +100,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   try {
                                     await _auth.signInWithEmailAndPassword(
                                         email: email, password: password);
-                                    await Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (contex) => const HomeScreen(),
-                                      ),
-                                    );
+                                    await Navigator.of(context)
+                                        .pushNamed(RouteManager.homePage);
                                     setState(() {
                                       isloading = false;
                                     });
@@ -134,11 +133,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(height: 10),
                             GestureDetector(
                               onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => SignupScreen(),
-                                  ),
-                                );
+                                Navigator.of(context)
+                                    .pushNamed(RouteManager.register);
                               },
                               child: Row(
                                 children: const [
