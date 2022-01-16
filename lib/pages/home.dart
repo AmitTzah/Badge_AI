@@ -24,6 +24,8 @@ _signOut() async {
 class _HomeScreenState extends State<HomeScreen> {
   String _scanBarcode = 'Unknown';
   int scannedRes = 0;
+  bool needLocalAuth = false;
+  bool locked = false;
   bool isAuth = false;
   @override
   void initState() {
@@ -40,6 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final _firebaseAuth = FirebaseAuth.instance;
     final String uid = _firebaseAuth.currentUser!.uid;
     int res = 0;
+    bool needAuth = false;
+    bool isLocked = false;
     var collection = FirebaseFirestore.instance.collection('users');
     var docSnapshot = await collection.doc(uid).get();
     if (docSnapshot.exists) {
@@ -49,8 +53,23 @@ class _HomeScreenState extends State<HomeScreen> {
         res = 1;
       }
     }
+
+    var doors = FirebaseFirestore.instance.collection('doors');
+    var door = await doors.doc('doors').get();
+    if (door.exists) {
+      Map<String, dynamic>? doorData = door.data();
+      if (doorData?['$_scanBarcode/local_auth'] == true) {
+        needAuth = true;
+      }
+      if (doorData?['$_scanBarcode/locked'] == true) {
+        isLocked = true;
+      }
+    }
+
     setState(() {
       scannedRes = res;
+      locked = isLocked;
+      needLocalAuth = needAuth;
     });
   }
 
@@ -127,9 +146,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     await scanQR();
                     await checkUserAuth();
                     final open = _scanBarcode + "/Open";
-                    if (scannedRes == 1) {
-                      await bioLocalAuth();
-                      if (isAuth == true) {
+                    if (scannedRes == 1 && locked == false) {
+                      if (needLocalAuth == true) {
+                        //Local_auth bio needed
+                        await bioLocalAuth();
+                        if (isAuth == true) {
+                          await widget.db.child(open).set(1);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("Access Granted  $_scanBarcode"),
+                              ),
+                              duration: const Duration(seconds: 5),
+                            ),
+                          );
+                        }
+                      } else {
+                        //No need for local_auth bio
                         await widget.db.child(open).set(1);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -143,17 +178,33 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       }
                     } else {
-                      await widget.db.child(open).set(2);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Access Denied  $_scanBarcode'),
+                      //User cant access door
+                      if (scannedRes == 0) {
+                        await widget.db.child(open).set(2);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Access Denied  $_scanBarcode'),
+                            ),
+                            duration: const Duration(seconds: 5),
                           ),
-                          duration: const Duration(seconds: 5),
-                        ),
-                      );
+                        );
+                        //Door is locked
+                      } else if (locked == true) {
+                        await widget.db.child(open).set(2);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Door Locked  $_scanBarcode'),
+                            ),
+                            duration: const Duration(seconds: 5),
+                          ),
+                        );
+                      }
                     }
                   }),
             ),
