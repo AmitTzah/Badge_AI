@@ -1,16 +1,14 @@
-# badge_ai
+Using this repository:
 
-A new Flutter project.
+After cloning this repository, you might notice a problem with the scanner.
+This is caused by the scanner pluding requiring FlutterFragmentActivity instead of FlutterActivity. for more info, read:
+https://github.com/AmolGangadhare/flutter_barcode_scanner/issues/128
 
-## Getting Started
+To fix this issue:
 
-This project is a starting point for a Flutter application.
+1. Go to C:\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_barcode_scanner-1.0.1\android\src\main\java\com\amolg\flutterbarcodescanner\BarcodeCaptureActivity.java
+2.In file FlutterBarcodeScannerPlugin.java
 
-A few resources to get you started if this is your first Flutter project:
+Modify all references from FlutterActivity to FlutterFragmentActivity.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
