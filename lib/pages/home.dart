@@ -5,6 +5,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
 import 'dart:async';
 
 class HomeScreen extends StatefulWidget {
@@ -23,6 +24,7 @@ _signOut() async {
 class _HomeScreenState extends State<HomeScreen> {
   String _scanBarcode = 'Unknown';
   int scannedRes = 0;
+  bool isAuth = false;
   @override
   void initState() {
     super.initState();
@@ -93,6 +95,16 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<void> bioLocalAuth() async {
+    var localAuth = LocalAuthentication();
+    bool didAuthenticate = await localAuth.authenticate(
+        localizedReason: 'Please authenticate to open door',
+        biometricOnly: true);
+    setState(() {
+      isAuth = didAuthenticate;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('You have logged in Successfuly'),
+            //const Text('You have logged in Successfuly'),
             const SizedBox(height: 50),
             SizedBox(
               height: 60,
@@ -116,27 +128,30 @@ class _HomeScreenState extends State<HomeScreen> {
                     await checkUserAuth();
                     final open = _scanBarcode + "/Open";
                     if (scannedRes == 1) {
-                      await widget.db.child(open).set(1);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          backgroundColor: Colors.green,
-                          content: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text('Access Granted'),
+                      await bioLocalAuth();
+                      if (isAuth == true) {
+                        await widget.db.child(open).set(1);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Access Granted  $_scanBarcode"),
+                            ),
+                            duration: const Duration(seconds: 5),
                           ),
-                          duration: Duration(seconds: 5),
-                        ),
-                      );
+                        );
+                      }
                     } else {
                       await widget.db.child(open).set(2);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           backgroundColor: Colors.red,
                           content: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text('Access Denied'),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('Access Denied  $_scanBarcode'),
                           ),
-                          duration: Duration(seconds: 5),
+                          duration: const Duration(seconds: 5),
                         ),
                       );
                     }
