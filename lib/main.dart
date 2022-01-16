@@ -1,4 +1,3 @@
-import 'package:badge_ai/pages/home_page.dart';
 import 'package:badge_ai/pages/qr_scan.dart';
 import 'package:badge_ai/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'firebase_options.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -24,6 +22,7 @@ void main() async {
   );
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -37,8 +36,8 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blueGrey,
           ),
-         initialRoute: RouteManager.login,
-         onGenerateRoute:RouteManager.generateRoute ,
+          initialRoute: RouteManager.login,
+          onGenerateRoute: RouteManager.generateRoute,
         );
       },
     );

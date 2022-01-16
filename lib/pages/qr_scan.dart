@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:badge_ai/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,8 +7,8 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class QRScan extends StatefulWidget {
-  const QRScan({Key? key}) : super(key: key);
-
+  QRScan({Key? key}) : super(key: key);
+  final DatabaseReference db = FirebaseDatabase.instance.ref();
   @override
   _QRScanState createState() => _QRScanState();
 }
@@ -100,17 +99,14 @@ class _QRScanState extends State<QRScan> {
                       direction: Axis.vertical,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        //ElevatedButton(
-                        //    onPressed: () => scanQR(),
-                        //    child: const Text('Start QR scan')),
-                        //Text('Scan result : $_scanBarcode\n',
-                        //    style: const TextStyle(fontSize: 20)),
                         ElevatedButton(
                           child: const Text('Scan Door'),
                           onPressed: () async {
                             await scanQR();
                             await checkUserAuth();
+                            final open = _scanBarcode + "/Open";
                             if (scannedRes == 1) {
+                              await widget.db.child(open).set(1);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   backgroundColor: Colors.blueGrey,
@@ -121,13 +117,8 @@ class _QRScanState extends State<QRScan> {
                                   duration: Duration(seconds: 5),
                                 ),
                               );
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        HomePage(door: _scanBarcode)),
-                              );
                             } else {
+                              await widget.db.child(open).set(2);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   backgroundColor: Colors.blueGrey,
