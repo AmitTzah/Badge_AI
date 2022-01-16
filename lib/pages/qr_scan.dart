@@ -1,7 +1,7 @@
 import 'dart:async';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:badge_ai/pages/home_page.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -13,6 +13,7 @@ class QRScan extends StatefulWidget {
 
 class _QRScanState extends State<QRScan> {
   String _scanBarcode = 'Unknown';
+  int scannedRes = 0;
 
   @override
   void initState() {
@@ -23,6 +24,25 @@ class _QRScanState extends State<QRScan> {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
             '#ff6666', 'Cancel', true, ScanMode.BARCODE)!
         .listen((barcode) => print(barcode));
+  }
+
+  Future<void> checkUserAuth() async {
+    final _firebaseAuth = FirebaseAuth.instance;
+    final String uid = _firebaseAuth.currentUser!.uid;
+    int res = 0;
+    print(FirebaseFirestore.instance.collection('users').doc(uid));
+    DocumentReference doc =
+        FirebaseFirestore.instance.collection('users').doc(uid);
+    print(doc);
+    doc.get().then((snapshot) {
+      if (snapshot.get(_scanBarcode) == 1) {
+        res = 1;
+      }
+    });
+    print(res);
+    setState(() {
+      scannedRes = res;
+    });
   }
 
   Future<void> scanQR() async {
@@ -88,12 +108,14 @@ class _QRScanState extends State<QRScan> {
                         ElevatedButton(
                           child: const Text('Open Door'),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      HomePage(door: _scanBarcode)),
-                            );
+                            if (scannedRes == 1) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        HomePage(door: _scanBarcode)),
+                              );
+                            }
                           },
                         )
                       ]));

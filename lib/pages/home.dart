@@ -36,8 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text('Scan QR'),
                   ),
                   onPressed: () async {
-                    await _signOut();
-                    if (_firebaseAuth.currentUser == null) {
+                    if (_firebaseAuth.currentUser != null) {
                       Navigator.of(context).pushNamed(RouteManager.qrScan);
                     }
                   }),
