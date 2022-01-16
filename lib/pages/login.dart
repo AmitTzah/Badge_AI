@@ -2,8 +2,8 @@ import 'package:badge_ai/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'button.dart';
-import 'constants.dart';
+import '../button.dart';
+import '../constants.dart';
 import 'home.dart';
 import 'register.dart';
 
