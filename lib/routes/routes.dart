@@ -1,6 +1,5 @@
 import 'package:badge_ai/pages/home.dart';
 import 'package:badge_ai/pages/login.dart';
-import 'package:badge_ai/pages/qr_scan.dart';
 import 'package:badge_ai/pages/register.dart';
 import 'package:flutter/material.dart';
 
@@ -25,11 +24,6 @@ class RouteManager {
       case homePage:
         return MaterialPageRoute(
           builder: (context) => HomeScreen(),
-        );
-
-      case qrScan:
-        return MaterialPageRoute(
-          builder: (context) => QRScan(),
         );
 
       default:

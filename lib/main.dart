@@ -1,4 +1,3 @@
-import 'package:badge_ai/pages/qr_scan.dart';
 import 'package:badge_ai/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
