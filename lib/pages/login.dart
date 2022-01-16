@@ -139,15 +139,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontSize: 15.sp, color: Colors.black87),
                             ),
                             SizedBox(width: 10),
-                            Hero(
-                              tag: '1',
-                              child: Text(
-                                'Sign up',
-                                style: TextStyle(
-                                    fontSize: 19.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
+                            Text(
+                              'Sign up',
+                              style: TextStyle(
+                                  fontSize: 19.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             )
                           ],
                         ),
