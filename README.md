@@ -1,7 +1,7 @@
 Using this repository:
 
 After cloning this repository, you might notice a problem with the scanner.
-This is caused by the scanner pluding requiring FlutterFragmentActivity instead of FlutterActivity. for more info, read:
+This is caused by the scanner plugin requiring FlutterFragmentActivity instead of FlutterActivity. for more info, read:
 https://github.com/AmolGangadhare/flutter_barcode_scanner/issues/128
 
 To fix this issue:
