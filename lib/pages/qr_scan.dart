@@ -5,15 +5,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class QRScan extends StatefulWidget {
+  const QRScan({Key? key}) : super(key: key);
+
   @override
   _QRScanState createState() => _QRScanState();
 }
 
 class _QRScanState extends State<QRScan> {
   String _scanBarcode = 'Unknown';
-  int scannedRes = 1;
+  int scannedRes = 0;
 
   @override
   void initState() {
@@ -30,16 +33,15 @@ class _QRScanState extends State<QRScan> {
     final _firebaseAuth = FirebaseAuth.instance;
     final String uid = _firebaseAuth.currentUser!.uid;
     int res = 0;
-    print(FirebaseFirestore.instance.collection('users').doc(uid));
-    DocumentReference doc =
-        FirebaseFirestore.instance.collection('users').doc(uid);
-    print(doc);
-    doc.get().then((snapshot) {
-      if (snapshot.get(_scanBarcode) == 1) {
+    var collection = FirebaseFirestore.instance.collection('users');
+    var docSnapshot = await collection.doc(uid).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? data = docSnapshot.data();
+      //res = data?[_scanBarcode]; // <-- The value you want to retrieve.
+      if (data?[_scanBarcode] == 1) {
         res = 1;
       }
-    });
-    print(res);
+    }
     setState(() {
       scannedRes = res;
     });
@@ -51,7 +53,6 @@ class _QRScanState extends State<QRScan> {
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.QR);
-      print(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
@@ -73,7 +74,6 @@ class _QRScanState extends State<QRScan> {
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-      print(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
@@ -100,20 +100,43 @@ class _QRScanState extends State<QRScan> {
                       direction: Axis.vertical,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        //ElevatedButton(
+                        //    onPressed: () => scanQR(),
+                        //    child: const Text('Start QR scan')),
+                        //Text('Scan result : $_scanBarcode\n',
+                        //    style: const TextStyle(fontSize: 20)),
                         ElevatedButton(
-                            onPressed: () => scanQR(),
-                            child: const Text('Start QR scan')),
-                        Text('Scan result : $_scanBarcode\n',
-                            style: const TextStyle(fontSize: 20)),
-                        ElevatedButton(
-                          child: const Text('Open Door'),
-                          onPressed: () {
+                          child: const Text('Scan Door'),
+                          onPressed: () async {
+                            await scanQR();
+                            await checkUserAuth();
                             if (scannedRes == 1) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.blueGrey,
+                                  content: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text('Access Granted'),
+                                  ),
+                                  duration: Duration(seconds: 5),
+                                ),
+                              );
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         HomePage(door: _scanBarcode)),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.blueGrey,
+                                  content: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text('Access Denied'),
+                                  ),
+                                  duration: Duration(seconds: 5),
+                                ),
                               );
                             }
                           },
