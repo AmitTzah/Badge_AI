@@ -7,9 +7,6 @@ https://github.com/AmolGangadhare/flutter_barcode_scanner/issues/128
 To fix this issue:
 
 1. Go to C:\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_barcode_scanner-1.0.1\android\src\main\java\com\amolg\flutterbarcodescanner\BarcodeCaptureActivity.java
-2. 
-3.In the file FlutterBarcodeScannerPlugin.java:
 
-Modify all references from FlutterActivity to FlutterFragmentActivity.
-
+2. In the file FlutterBarcodeScannerPlugin.java, modify all references from FlutterActivity to FlutterFragmentActivity.
 
