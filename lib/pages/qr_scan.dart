@@ -13,7 +13,7 @@ class QRScan extends StatefulWidget {
 
 class _QRScanState extends State<QRScan> {
   String _scanBarcode = 'Unknown';
-  int scannedRes = 0;
+  int scannedRes = 1;
 
   @override
   void initState() {
