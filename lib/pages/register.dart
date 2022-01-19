@@ -53,11 +53,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       Text(
                         "Sign Up",
                         style: TextStyle(
-                            fontSize: 40.sp,
+                            fontSize: 30.sp,
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 5.h),
+                      SizedBox(height: 3.h),
                       const SizedBox(height: 30),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
@@ -112,7 +112,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               color: Colors.black,
                             )),
                       ),
-                      SizedBox(height: 15.h),
+                      SizedBox(height: 5.h),
                       LoginSignupButton(
                         title: 'Register',
                         ontapp: () async {
@@ -164,7 +164,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           }
                         },
                       ),
-                      SizedBox(height: 1.h),
+                      const SizedBox(height: 50),
+                      const Text('BadgeAI by Lior & Amit')
                     ],
                   ),
                 ),

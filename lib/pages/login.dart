@@ -161,10 +161,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontSize: 19.sp,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
-                            )
+                            ),
                           ],
                         ),
-                      )
+                      ),
+                      const SizedBox(height: 50),
+                      const Text('BadgeAI by Lior & Amit')
                     ],
                   ),
                 ),

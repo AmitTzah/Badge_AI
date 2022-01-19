@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool needLocalAuth = false;
   bool locked = false;
   bool isAuth = false;
+  bool doorExist = false;
   @override
   void initState() {
     super.initState();
@@ -40,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
             '#ff6666', 'Cancel', true, ScanMode.BARCODE)!
-        .listen((barcode) => print(barcode));
+        .listen((barcode) => true);
   }
 
   Future<void> checkUserAuth() async {
@@ -48,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     uid = _firebaseAuth.currentUser!.uid;
     bool needAuth = false;
     bool isLocked = false;
+    bool exist = false;
     var collection = FirebaseFirestore.instance.collection('users');
     var docSnapshot = await collection.doc(uid).get();
     if (docSnapshot.exists) {
@@ -56,11 +58,13 @@ class _HomeScreenState extends State<HomeScreen> {
         res = 1;
       }
     }
-
     var doors = FirebaseFirestore.instance.collection('doors');
     var door = await doors.doc('doors').get();
     if (door.exists) {
       Map<String, dynamic>? doorData = door.data();
+      if (doorData?[_scanBarcode] == true) {
+        exist = true;
+      }
       if (doorData?['$_scanBarcode/local_auth'] == true) {
         needAuth = true;
       }
@@ -73,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
       scannedRes = res;
       locked = isLocked;
       needLocalAuth = needAuth;
+      doorExist = exist;
     });
   }
 
@@ -153,9 +158,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     await scanQR();
                     await checkUserAuth();
                     final open = _scanBarcode + "/Open";
-                    if (scannedRes == 1 && locked == false) {
+                    if (scannedRes == 1 &&
+                        locked == false &&
+                        doorExist == true) {
                       if (needLocalAuth == true) {
-                        //Local_auth bio needed
                         await bioLocalAuth();
                         if (isAuth == true) {
                           await widget.db.child(open).set(1);
@@ -178,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             backgroundColor: Colors.green,
                             content: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("Access Granted  $_scanBarcode"),
+                              child: Text("Access Granted:  $_scanBarcode"),
                             ),
                             duration: const Duration(seconds: 5),
                           ),
@@ -186,14 +192,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     } else {
                       //User cant access door
-                      if (scannedRes == 0) {
+                      if (doorExist == false) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.blueGrey,
+                            content: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Door Not Exist:  $_scanBarcode'),
+                            ),
+                            duration: const Duration(seconds: 5),
+                          ),
+                        );
+                      } else if (scannedRes == 0) {
                         await widget.db.child(open).set(2);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.red,
                             content: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text('Access Denied  $_scanBarcode'),
+                              child: Text('Access Denied:  $_scanBarcode'),
                             ),
                             duration: const Duration(seconds: 5),
                           ),
@@ -206,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             backgroundColor: Colors.orange,
                             content: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text('Door Locked  $_scanBarcode'),
+                              child: Text('Door Locked:  $_scanBarcode'),
                             ),
                             duration: const Duration(seconds: 5),
                           ),
@@ -230,7 +247,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.of(context).pushNamed(RouteManager.login);
                     }
                   }),
-            )
+            ),
+            const SizedBox(height: 50),
+            const Text('BadgeAI by Lior & Amit')
           ],
         ),
       ),
