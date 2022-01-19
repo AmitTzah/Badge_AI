@@ -9,7 +9,10 @@ import 'package:local_auth/local_auth.dart';
 import 'dart:async';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  final String fullname;
+  final String doors;
+  HomeScreen({Key? key, required this.fullname, required this.doors})
+      : super(key: key);
   final DatabaseReference db = FirebaseDatabase.instance.ref();
 
   @override
@@ -22,6 +25,8 @@ _signOut() async {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _firebaseAuth = FirebaseAuth.instance;
+  String uid = '';
   String _scanBarcode = 'Unknown';
   int scannedRes = 0;
   bool needLocalAuth = false;
@@ -39,17 +44,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> checkUserAuth() async {
-    final _firebaseAuth = FirebaseAuth.instance;
-    final String uid = _firebaseAuth.currentUser!.uid;
     int res = 0;
+    uid = _firebaseAuth.currentUser!.uid;
     bool needAuth = false;
     bool isLocked = false;
     var collection = FirebaseFirestore.instance.collection('users');
     var docSnapshot = await collection.doc(uid).get();
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
-      //res = data?[_scanBarcode]; // <-- The value you want to retrieve.
-      if (data?[_scanBarcode] == 1) {
+      if (data?[_scanBarcode] == true) {
         res = 1;
       }
     }
@@ -132,15 +135,19 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //const Text('You have logged in Successfuly'),
+            Text('Hello ${widget.fullname}'),
             const SizedBox(height: 50),
+            const Text('Authorized:'),
+            const SizedBox(height: 20),
+            Text(widget.doors),
+            const SizedBox(height: 70),
             SizedBox(
               height: 60,
               width: 150,
               child: ElevatedButton(
                   clipBehavior: Clip.hardEdge,
                   child: const Center(
-                    child: Text('Scan QR'),
+                    child: Text('Scan Door'),
                   ),
                   onPressed: () async {
                     await scanQR();
@@ -196,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         await widget.db.child(open).set(2);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            backgroundColor: Colors.red,
+                            backgroundColor: Colors.orange,
                             content: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text('Door Locked  $_scanBarcode'),

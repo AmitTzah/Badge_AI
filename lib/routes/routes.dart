@@ -13,17 +13,17 @@ class RouteManager {
     switch (settings.name) {
       case login:
         return MaterialPageRoute(
-          builder: (context) => LoginScreen(),
+          builder: (context) => const LoginScreen(),
         );
 
       case register:
         return MaterialPageRoute(
-          builder: (context) => SignupScreen(),
+          builder: (context) => const SignupScreen(),
         );
 
       case homePage:
         return MaterialPageRoute(
-          builder: (context) => HomeScreen(),
+          builder: (context) => HomeScreen(fullname: fullname, doors: doors),
         );
 
       default:

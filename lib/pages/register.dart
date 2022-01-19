@@ -13,6 +13,8 @@ class SignupScreen extends StatefulWidget {
   _SignupScreenState createState() => _SignupScreenState();
 }
 
+String fullnameregister = '';
+
 class _SignupScreenState extends State<SignupScreen> {
   final formkey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
@@ -72,6 +74,24 @@ class _SignupScreenState extends State<SignupScreen> {
                             color: Colors.black,
                           ),
                         ),
+                      ),
+                      SizedBox(height: 5.h),
+                      TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter Full Name";
+                          }
+                        },
+                        onChanged: (value) {
+                          fullnameregister = value;
+                        },
+                        textAlign: TextAlign.center,
+                        decoration: kTextFieldDecoration.copyWith(
+                            hintText: 'Full Name',
+                            prefixIcon: const Icon(
+                              Icons.person,
+                              color: Colors.black,
+                            )),
                       ),
                       SizedBox(height: 5.h),
                       TextFormField(
@@ -161,8 +181,10 @@ Future<void> setUser(UserCredential user) async {
       .set({
     'uid': user.user!.uid,
     'email': user.user!.email,
-    '/Building1/Door1': 0,
-    '/Building1/Door2': 0,
-    '/Building2/Door1': 0
+    'fullname': fullnameregister,
+    'doors': 'None',
+    '/Building1/Door1': false,
+    '/Building1/Door2': false,
+    '/Building2/Door1': false
   }); // <-- Your data
 }

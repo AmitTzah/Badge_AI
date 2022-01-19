@@ -2,11 +2,10 @@ import 'package:badge_ai/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sizer/sizer.dart';
 import '../button.dart';
 import '../constants.dart';
-import 'home.dart';
-import 'register.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,12 +14,28 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+String fullname = '';
+String doors = '';
+
 class _LoginScreenState extends State<LoginScreen> {
   final formkey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
   String email = '';
   String password = '';
+  String uid = '';
   bool isloading = false;
+
+  Future<void> setUser() async {
+    uid = _auth.currentUser!.uid;
+    var collection = FirebaseFirestore.instance.collection('users');
+    var docSnapshot = await collection.doc(uid).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? data = docSnapshot.data();
+      fullname = data?['fullname'];
+      doors = data?['doors'];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,6 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             try {
                               await _auth.signInWithEmailAndPassword(
                                   email: email, password: password);
+                              await setUser();
                               await Navigator.of(context)
                                   .pushNamed(RouteManager.homePage);
                               setState(() {
@@ -138,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                   fontSize: 15.sp, color: Colors.black87),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Text(
                               'Sign up',
                               style: TextStyle(
