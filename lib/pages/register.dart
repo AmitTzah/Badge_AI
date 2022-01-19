@@ -53,12 +53,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       Text(
                         "Sign Up",
                         style: TextStyle(
-                            fontSize: 30.sp,
+                            fontSize: 37.sp,
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 3.h),
-                      const SizedBox(height: 30),
+                      SizedBox(height: 10.h),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
                         onChanged: (value) {
@@ -164,8 +163,14 @@ class _SignupScreenState extends State<SignupScreen> {
                           }
                         },
                       ),
-                      const SizedBox(height: 50),
-                      const Text('BadgeAI by Lior & Amit')
+                      SizedBox(height: 5.h),
+                      Text(
+                        'BadgeAI by Lior & Amit',
+                        style: TextStyle(
+                            fontSize: 13.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal),
+                      ),
                     ],
                   ),
                 ),

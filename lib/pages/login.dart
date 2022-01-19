@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                   fontSize: 15.sp, color: Colors.black87),
                             ),
-                            const SizedBox(width: 10),
+                            SizedBox(width: 3.w),
                             Text(
                               'Sign up',
                               style: TextStyle(
@@ -165,8 +165,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 50),
-                      const Text('BadgeAI by Lior & Amit')
+                      SizedBox(height: 5.h),
+                      Text(
+                        'BadgeAI by Lior & Amit',
+                        style: TextStyle(
+                            fontSize: 13.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal),
+                      ),
                     ],
                   ),
                 ),

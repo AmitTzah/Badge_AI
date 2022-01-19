@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'dart:async';
 
+import 'package:sizer/sizer.dart';
+
 class HomeScreen extends StatefulWidget {
   final String fullname;
   final String doors;
@@ -135,24 +137,59 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        title: Text(
+          'Hello ${widget.fullname}',
+          style: TextStyle(
+              fontSize: 20.sp,
+              color: Colors.black,
+              fontWeight: FontWeight.bold),
+        ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+            size: 30,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text('Hello ${widget.fullname}'),
-            const SizedBox(height: 50),
-            const Text('Authorized:'),
-            const SizedBox(height: 20),
-            Text(widget.doors),
-            const SizedBox(height: 70),
+            SizedBox(height: 10.h),
+            Text(
+              'Authorized doors:',
+              style: TextStyle(
+                  fontSize: 20.sp,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 3.h),
+            Text(
+              widget.doors,
+              style: TextStyle(
+                  fontSize: 15.sp,
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal),
+            ),
+            SizedBox(height: 10.h),
             SizedBox(
-              height: 60,
-              width: 150,
+              height: 10.h,
+              width: 50.w,
               child: ElevatedButton(
                   clipBehavior: Clip.hardEdge,
-                  child: const Center(
-                    child: Text('Scan Door'),
+                  child: Center(
+                    child: Text(
+                      'Scan Door',
+                      style: TextStyle(
+                          fontSize: 20.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal),
+                    ),
                   ),
                   onPressed: () async {
                     await scanQR();
@@ -232,14 +269,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                   }),
             ),
-            const SizedBox(height: 50),
+            SizedBox(height: 5.h),
             SizedBox(
-              height: 60,
-              width: 150,
+              height: 10.h,
+              width: 50.w,
               child: ElevatedButton(
                   clipBehavior: Clip.hardEdge,
-                  child: const Center(
-                    child: Text('Log out'),
+                  child: Center(
+                    child: Text(
+                      'Log out',
+                      style: TextStyle(
+                          fontSize: 20.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal),
+                    ),
                   ),
                   onPressed: () async {
                     await _signOut();
@@ -248,8 +291,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                   }),
             ),
-            const SizedBox(height: 50),
-            const Text('BadgeAI by Lior & Amit')
+            SizedBox(height: 5.h),
+            Text(
+              'BadgeAI by Lior & Amit',
+              style: TextStyle(
+                  fontSize: 13.sp,
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal),
+            ),
           ],
         ),
       ),
