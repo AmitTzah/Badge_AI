@@ -7,7 +7,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'dart:async';
-
 import 'package:sizer/sizer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,11 +15,11 @@ class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key, required this.fullname, required this.doors})
       : super(key: key);
   final DatabaseReference db = FirebaseDatabase.instance.ref();
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+//Project variables
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
 //Log out
@@ -79,7 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
         isLocked = true;
       }
     }
-
     setState(() {
       scannedRes = res;
       locked = isLocked;
@@ -88,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  //Scan QR code
   Future<void> scanQR() async {
     String barcodeScanRes;
     // Platform messages may fail, so we use a try/catch PlatformException.
@@ -97,12 +96,10 @@ class _HomeScreenState extends State<HomeScreen> {
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
-
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
-
     setState(() {
       _scanBarcode = barcodeScanRes;
     });
@@ -118,12 +115,10 @@ class _HomeScreenState extends State<HomeScreen> {
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
-
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
-
     setState(() {
       _scanBarcode = barcodeScanRes;
     });
