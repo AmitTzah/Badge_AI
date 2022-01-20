@@ -13,15 +13,19 @@ class SignupScreen extends StatefulWidget {
   _SignupScreenState createState() => _SignupScreenState();
 }
 
+//Project variable
 String fullnameregister = '';
 
 class _SignupScreenState extends State<SignupScreen> {
   final formkey = GlobalKey<FormState>();
+  //Class variables
   final _auth = FirebaseAuth.instance;
   String email = '';
   String password = '';
   bool isloading = false;
   @override
+
+  //Main widget
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -33,7 +37,7 @@ class _SignupScreenState extends State<SignupScreen> {
             color: Colors.black,
             size: 30,
           ),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(context).pop(), //Go back to login
         ),
       ),
       body: isloading
@@ -120,6 +124,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               isloading = true;
                             });
                             try {
+                              //Register
                               final UserCredential user =
                                   await _auth.createUserWithEmailAndPassword(
                                       email: email, password: password);
@@ -180,6 +185,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 }
 
+//Set user in firestore database
 Future<void> setUser(UserCredential user) async {
   FirebaseFirestore.instance
       .collection('users')

@@ -22,11 +22,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+//Log out
 _signOut() async {
   await _firebaseAuth.signOut();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  //Class variable
   final _firebaseAuth = FirebaseAuth.instance;
   String uid = '';
   String _scanBarcode = 'Unknown';
@@ -40,12 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  //Stream scan
   Future<void> startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
             '#ff6666', 'Cancel', true, ScanMode.BARCODE)!
         .listen((barcode) => true);
   }
 
+  //Check if user can access scanned door
   Future<void> checkUserAuth() async {
     int res = 0;
     uid = _firebaseAuth.currentUser!.uid;
@@ -124,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  //Local_auth fingerprint authentication
   Future<void> bioLocalAuth() async {
     var localAuth = LocalAuthentication();
     bool didAuthenticate = await localAuth.authenticate(
@@ -134,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  //Page widget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -201,6 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (needLocalAuth == true) {
                         await bioLocalAuth();
                         if (isAuth == true) {
+                          //Need for local_auth
                           await widget.db.child(open).set(1);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -214,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         }
                       } else {
-                        //No need for local_auth bio
+                        //No need for local_auth
                         await widget.db.child(open).set(1);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -230,6 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     } else {
                       //User cant access door
                       if (doorExist == false) {
+                        //Door not exist
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.blueGrey,
@@ -241,6 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       } else if (scannedRes == 0) {
+                        //User not allowed
                         await widget.db.child(open).set(2);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -277,6 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   clipBehavior: Clip.hardEdge,
                   child: Center(
                     child: Text(
+                      //Logout button
                       'Log out',
                       style: TextStyle(
                           fontSize: 20.sp,

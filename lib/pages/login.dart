@@ -14,10 +14,12 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+//Project variables
 String fullname = '';
 String doors = '';
 
 class _LoginScreenState extends State<LoginScreen> {
+  //Class variable
   final formkey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
   String email = '';
@@ -25,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String uid = '';
   bool isloading = false;
 
+  //Set user variables to forward next page
   Future<void> setUser() async {
     uid = _auth.currentUser!.uid;
     var collection = FirebaseFirestore.instance.collection('users');
@@ -36,6 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  //Main widget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,6 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               isloading = true;
                             });
                             try {
+                              //Login
                               await _auth.signInWithEmailAndPassword(
                                   email: email, password: password);
                               await setUser();
